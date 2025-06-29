@@ -22,7 +22,7 @@ module.exports = {
     copyright: "Copyright©2025 AI Chat",
     publish: {
         provider: "github", // 自动更新提供商（如 GitHub Releases）
-        token: import.meta.env.GITHUB_KEY,
+        token: "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",
         owner: "Ian-soy",
         updaterCacheDirName: "AI-Chat-updater",
         repo: "AI-Chat"
