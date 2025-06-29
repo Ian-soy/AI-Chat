@@ -6,4 +6,7 @@ import MateChat from '@matechat/core';
 
 import '@devui-design/icons/icomoon/devui-icon.css';
 
-createApp(App).use(MateChat).mount('#app');
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+
+createApp(App).use(MateChat).use(ElementPlus).mount('#app');

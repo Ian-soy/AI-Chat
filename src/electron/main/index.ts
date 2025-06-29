@@ -13,12 +13,13 @@ import * as path from 'path';
 // 主进程事件监听
 app.whenReady().then(() => {
   const mainWindow = new BrowserWindow({
-    width: 1150,
-    height: 750,
+    width: 900,
+    height: 650,
     icon: icon,
     titleBarStyle: 'hidden', // 隐藏原生标题栏
     frame: false, // 无边框窗口（可选）
     show: false,
+    center: true,
     webPreferences: {
         preload: path.join(__dirname, '..', 'preload/index.js'),
         contextIsolation: true

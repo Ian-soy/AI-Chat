@@ -21,14 +21,15 @@ const path__namespace = /* @__PURE__ */ _interopNamespaceDefault(path);
 const icon = electron.nativeImage.createFromPath(path__namespace.join(__dirname, "..", "logo.png"));
 electron.app.whenReady().then(() => {
   const mainWindow = new electron.BrowserWindow({
-    width: 1150,
-    height: 750,
+    width: 900,
+    height: 650,
     icon,
     titleBarStyle: "hidden",
     // 隐藏原生标题栏
     frame: false,
     // 无边框窗口（可选）
     show: false,
+    center: true,
     webPreferences: {
       preload: path__namespace.join(__dirname, "..", "preload/index.js"),
       contextIsolation: true

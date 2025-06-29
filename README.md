@@ -1,6 +1,6 @@
 # 所用技术栈
 
-Vue 3 + TypeScript + Vite + electron
+Vue 3 + TypeScript + Vite + electron + openai + element-plus + lodash-es + deepseek
 
 ## node
 
@@ -22,6 +22,10 @@ npm run build:electron
 
 ![](./public/1.png)
 ![](./public/2.png)
+![](./public/3.png)
+![](./public/4.png)
+![](./public/5.png)
+![](./public/6.png)
 
 ## 项目结构
 
