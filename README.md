@@ -1,10 +1,49 @@
-# Vue 3 + TypeScript + Vite
+# 所用技术栈
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Vue 3 + TypeScript + Vite + electron
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## node
 
-## 展示
+node 版本 >=20.19.0
 
-![展示](./public/1.png)
-![展示](./public/2.png)
+## 项目创建
+
+```bash
+npm create vite@latest electron-vue -- --template vue-ts
+
+npm install electron electron-builder --save-dev
+
+npm run dev
+
+npm run build
+
+npm run build:electron
+```
+
+展示图片
+![](./public/1.png)
+![](./public/2.png)
+
+## 项目结构
+
+```bash
+electron-vue
+├── build
+│   ├── installer.nsh
+├── publish
+│   ├── vite.svg
+├── src
+│   ├── assets
+│   ├── components
+│   ├── preload.ts
+│   ├── renderer
+│   │   ├── App.vue
+│   │   ├── main.ts
+│   │   ├── style.css
+│   │   └── index.html
+│   └── electron
+│       ├── main
+│       │   ├── index.ts
+│       ├── preload
+│       │   ├── index.ts
+
