@@ -20,7 +20,6 @@ npm run build
 npm run build:electron
 ```
 
-展示图片
 ![](./public/1.png)
 ![](./public/2.png)
 

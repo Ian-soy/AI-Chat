@@ -65,7 +65,7 @@ electron.app.on("browser-window-created", () => {
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
     electron.app.removeAsDefaultProtocolClient("ai-chat");
-    console.log("由于框架特殊性开发环境下无法使用");
+    console.log("connot work");
   }
 } else {
   electron.app.setAsDefaultProtocolClient("ai-chat");

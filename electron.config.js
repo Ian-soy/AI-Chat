@@ -27,8 +27,7 @@ module.exports = {
         updaterCacheDirName: "AI-Chat-updater",
         repo: "AI-Chat",
         releaseType: "release",
-        generateReleaseNotes: true,
-        source: false // 关键配置，设为 false 禁用源码压缩包生成
+        // source: false // 关键配置，设为 false 禁用源码压缩包生成
     },
     directories: {
         output: `release/${currentTime}`
@@ -36,7 +35,15 @@ module.exports = {
     files: [
         "dist/**/*",
         "public/**/*",
-        "!node_modules"
+        "!node_modules",
+        "*.js", // 主进程文件（根据实际路径调整）
+        "!src/**/*", // 排除源码目录
+        "!test/**/*", // 排除测试文件
+        "!.vscode/**/*", // 排除开发配置
+        "!*.config.js", // 排除配置文件（如需保留可移除）
+        "!package.json", // 若不需要源码中的 `package.json` 可排除
+        "!yarn.lock", // 排除依赖锁文件
+        "!README.md" // 排除文档文件
     ],
     asar: true,
     // 仅在生产环境压缩

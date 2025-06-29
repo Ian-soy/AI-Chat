@@ -26,7 +26,7 @@
           :avatarConfig="{ imgSrc: 'https://matechat.gitcode.com/png/demo/userAvatar.svg' }"
         >
         </McBubble>
-        <McBubble v-else :content="msg.content" :avatarConfig="{ imgSrc: 'https://matechat.gitcode.com/logo.svg' }"> </McBubble>
+        <McBubble v-else :loading="msg.loading" :content="msg.content" :avatarConfig="{ imgSrc: 'https://matechat.gitcode.com/logo.svg' }"> </McBubble>
       </template>
     </McLayoutContent>
     <div class="shortcut" style="display: flex; align-items: center; gap: 8px">
@@ -146,15 +146,26 @@ const onSubmit = (evt: any) => {
     avatarConfig: { name: 'user' },
   });
 
-//   setTimeout(() => {
-//     // 模型返回消息
-//     messages.value.push({
-//       from: 'model',
-//       content: evt,
-//     });
-//   }, 200);
+  setTimeout(() => {
+    // 模型返回消息
+    messages.value.push({
+      from: 'model',
+      content: evt,
+      loading: true
+    });
+  }, 200);
 
-  fetchData(evt);
+  setTimeout(() => {
+    // 模型返回消息
+    messages.value.pop();
+    messages.value.push({
+      from: 'model',
+      content: evt,
+      loading: false
+    });
+  }, 1000);
+
+  // fetchData(evt);
 };
 
 const fetchData = async (ques: any) => {
