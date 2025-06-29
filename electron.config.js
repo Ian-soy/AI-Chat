@@ -25,7 +25,10 @@ module.exports = {
         token: "",
         owner: "Ian-soy",
         updaterCacheDirName: "AI-Chat-updater",
-        repo: "AI-Chat"
+        repo: "AI-Chat",
+        releaseType: "release",
+        generateReleaseNotes: true,
+        source: false // 关键配置，设为 false 禁用源码压缩包生成
     },
     directories: {
         output: `release/${currentTime}`

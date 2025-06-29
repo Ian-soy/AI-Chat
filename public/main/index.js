@@ -1,1 +1,72 @@
-"use strict";const o=require("electron"),r=require("path");function s(e){const n=Object.create(null,{[Symbol.toStringTag]:{value:"Module"}});if(e){for(const t in e)if(t!=="default"){const a=Object.getOwnPropertyDescriptor(e,t);Object.defineProperty(n,t,a.get?a:{enumerable:!0,get:()=>e[t]})}}return n.default=e,Object.freeze(n)}const i=s(r),l=o.nativeImage.createFromPath(i.join(__dirname,"..","logo.png"));o.app.whenReady().then(()=>{const e=new o.BrowserWindow({width:1150,height:750,icon:l,titleBarStyle:"hidden",frame:!1,show:!1,webPreferences:{preload:i.join(__dirname,"..","preload/index.js"),contextIsolation:!0}});e.once("ready-to-show",()=>{e.show()}),process.env.VITE_DEV_SERVER_URL?e.loadURL(process.env.VITE_DEV_SERVER_URL):e.loadFile("dist/index.html"),console.log("devIcon===>",i.join(__dirname,"..","logo.png"));const n=new o.Tray(l),t=o.Menu.buildFromTemplate([{label:"显示",click:()=>e.show()},{label:"退出",role:"quit"}]);n.setToolTip("AI Chat"),n.setContextMenu(t),o.ipcMain.on("window-minimize",()=>e.minimize()),o.ipcMain.on("window-toggle-maximize",()=>{e.isMaximized()?e.unmaximize():e.maximize()}),o.ipcMain.on("window-close",()=>e.close())});o.app.commandLine.appendSwitch("disable-features","OutOfBlinkCors");o.app.on("window-all-closed",()=>{o.app.quit()});o.app.on("browser-window-created",()=>{console.log("window-created")});process.defaultApp?process.argv.length>=2&&(o.app.removeAsDefaultProtocolClient("ai-chat"),console.log("由于框架特殊性开发环境下无法使用")):o.app.setAsDefaultProtocolClient("ai-chat");
+"use strict";
+const electron = require("electron");
+const path = require("path");
+function _interopNamespaceDefault(e) {
+  const n = Object.create(null, { [Symbol.toStringTag]: { value: "Module" } });
+  if (e) {
+    for (const k in e) {
+      if (k !== "default") {
+        const d = Object.getOwnPropertyDescriptor(e, k);
+        Object.defineProperty(n, k, d.get ? d : {
+          enumerable: true,
+          get: () => e[k]
+        });
+      }
+    }
+  }
+  n.default = e;
+  return Object.freeze(n);
+}
+const path__namespace = /* @__PURE__ */ _interopNamespaceDefault(path);
+const icon = electron.nativeImage.createFromPath(path__namespace.join(__dirname, "..", "logo.png"));
+electron.app.whenReady().then(() => {
+  const mainWindow = new electron.BrowserWindow({
+    width: 1150,
+    height: 750,
+    icon,
+    titleBarStyle: "hidden",
+    // 隐藏原生标题栏
+    frame: false,
+    // 无边框窗口（可选）
+    show: false,
+    webPreferences: {
+      preload: path__namespace.join(__dirname, "..", "preload/index.js"),
+      contextIsolation: true
+    }
+  });
+  mainWindow.once("ready-to-show", () => {
+    mainWindow.show();
+  });
+  if (process.env.VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
+  } else {
+    mainWindow.loadFile("dist/index.html");
+  }
+  const tray = new electron.Tray(icon);
+  const contextMenu = electron.Menu.buildFromTemplate([
+    { label: "显示", click: () => mainWindow.show() },
+    { label: "退出", role: "quit" }
+  ]);
+  tray.setToolTip("AI Chat");
+  tray.setContextMenu(contextMenu);
+  electron.ipcMain.on("window-minimize", () => mainWindow.minimize());
+  electron.ipcMain.on("window-toggle-maximize", () => {
+    mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
+  });
+  electron.ipcMain.on("window-close", () => mainWindow.close());
+});
+electron.app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
+electron.app.on("window-all-closed", () => {
+  electron.app.quit();
+});
+electron.app.on("browser-window-created", () => {
+  console.log("window-created");
+});
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    electron.app.removeAsDefaultProtocolClient("ai-chat");
+    console.log("由于框架特殊性开发环境下无法使用");
+  }
+} else {
+  electron.app.setAsDefaultProtocolClient("ai-chat");
+}

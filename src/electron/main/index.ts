@@ -40,9 +40,6 @@ app.whenReady().then(() => {
   // 系统托盘
   // 开发环境使用 src 目录
   // const devIcon = icon
-
-  console.log('devIcon===>', path.join(__dirname, '..', "logo.png"));
-
   // 生产环境使用 resources 目录
   // const prodIcon = path.join(process.resourcesPath, 'assets/icon.ico')
   // const finalIcon = process.env.NODE_ENV === 'development' ? devIcon : prodIcon
