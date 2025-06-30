@@ -22,7 +22,7 @@ module.exports = {
     copyright: "Copyright©2025 SpaceHelper",
     publish: {
         provider: "github", // 自动更新提供商（如 GitHub Releases）
-        token: "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",
+        token: "",
         owner: "Ian-soy",
         updaterCacheDirName: "AI-Chat-updater",
         repo: "AI-Chat",
