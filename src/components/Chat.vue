@@ -264,24 +264,24 @@ watch(() => messages.value, () => {
 // 创建deepseek客户端
 const client = new OpenAI({
   apiKey: import.meta.env.VITE_DEEPSEEK_API_KEY, // 模型APIKey
-  baseURL: 'https://api.deepseek.com', // 模型API地址
+  baseURL: import.meta.env.VITE_DEEPSEEK_BASE_URL, // 模型API地址
   dangerouslyAllowBrowser: true, // 浏览器环境使用需要开启
 });
 
 // 提交信息
 const onSubmit = debounce((evt: any) => {
-  // const now = Date.now();
+  const now = Date.now();
 
-  // if (!lastSubmitTime.value || (now - lastSubmitTime.value) > 60000) {
-  //   lastSubmitTime.value = now;
-  // } else {
-  //   ElNotification({
-  //     title: 'Warning',
-  //     message: '60秒内不能重复提交，token限制！',
-  //     type: 'warning',
-  //   })
-  //   return;
-  // }
+  if (!lastSubmitTime.value || (now - lastSubmitTime.value) > 60000) {
+    lastSubmitTime.value = now;
+  } else {
+    ElNotification({
+      title: 'Warning',
+      message: '60秒内不能重复提交，token限制！',
+      type: 'warning',
+    })
+    return;
+  }
 
   isVisible.value = false;
   if (!evt || evt === "@") return;
@@ -295,26 +295,26 @@ const onSubmit = debounce((evt: any) => {
     avatarConfig: { name: 'user' },
   });
 
-  setTimeout(() => {
-    // 模型返回消息
-    messages.value.push({
-      from: 'model',
-      content: evt,
-      loading: true
-    });
-  }, 200);
+  // setTimeout(() => {
+  //   // 模型返回消息
+  //   messages.value.push({
+  //     from: 'model',
+  //     content: evt,
+  //     loading: true
+  //   });
+  // }, 200);
 
-  setTimeout(() => {
-    // 模型返回消息
-    messages.value.pop();
-    messages.value.push({
-      from: 'model',
-      content: content.value,
-      loading: false
-    });
-  }, 800);
+  // setTimeout(() => {
+  //   // 模型返回消息
+  //   messages.value.pop();
+  //   messages.value.push({
+  //     from: 'model',
+  //     content: content.value,
+  //     loading: false
+  //   });
+  // }, 800);
 
-  // fetchData(evt);
+  fetchData(evt);
 }, 500);
 
 const fetchData = async (ques: any) => {
