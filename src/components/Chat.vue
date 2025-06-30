@@ -5,9 +5,9 @@
       style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px"
     >
       <McIntroduction
-        :logoImg="'https://matechat.gitcode.com/logo2x.svg'"
-        :title="'MateChat'"
-        :subTitle="'Hi，欢迎使用 MateChat'"
+        :logoImg="logo"
+        :title="'SpaceHelper'"
+        :subTitle="'Hi，欢迎使用 SpaceHelper'"
         :description="description"
       ></McIntroduction>
       <McPrompt
@@ -23,10 +23,10 @@
           v-if="msg.from === 'user'"
           :content="msg.content"
           :align="'right'"
-          :avatarConfig="{ imgSrc: 'https://matechat.gitcode.com/png/demo/userAvatar.svg' }"
+          :avatarConfig="{ imgSrc: logo }"
         >
         </McBubble>
-        <McBubble v-else :loading="msg.loading" :avatarConfig="{ imgSrc: 'https://matechat.gitcode.com/logo.svg' }">
+        <McBubble v-else :loading="msg.loading" :avatarConfig="{ imgSrc: logo }">
           <McMarkdownCard :content="msg.content"></McMarkdownCard>
         </McBubble>
       </template>
@@ -81,6 +81,7 @@ import 'vue-devui/button/style.css';
 import OpenAI from 'openai';
 import { debounce } from 'lodash-es';
 import { ElNotification } from 'element-plus';
+import logo from '../assets/logo-32.png';
 
 const isVisible = ref(false);
 const inputRef = ref();
@@ -93,8 +94,8 @@ let currentListLabel;
 const lastSubmitTime = ref(null); // 上次提交时间
 
 const description = [
-  'MateChat 可以辅助研发人员编码、查询知识和相关作业信息、编写文档等。',
-  '作为AI模型，MateChat 提供的答案可能不总是确定或准确的，但您的反馈可以帮助 MateChat 做的更好。',
+  'SpaceHelper 可协助开发者进行代码编写、知识检索、信息查询及文档撰写等。' ,
+  '作为人工智能模型，SpaceHelper 提供的解答可能并非始终精准无误，不过您的反馈将助力 SpaceHelper 持续优化。'
 ];
 
 const content = ref(`
@@ -143,21 +144,21 @@ const introPrompt = {
   list: [
     {
       value: 'quickSort',
-      label: '帮我写一个快速排序',
+      label: '帮我生成一份威海5日游计划',
       iconConfig: { name: 'icon-info-o', color: '#5e7ce0' },
-      desc: '使用 js 实现一个快速排序',
+      desc: '使用小红书格式进行排版布局',
     },
     {
       value: 'helpMd',
-      label: '你可以帮我做些什么？',
+      label: '什么是MCP?',
       iconConfig: { name: 'icon-star', color: 'rgb(255, 215, 0)' },
-      desc: '了解当前大模型可以帮你做的事',
+      desc: '了解MCP概念、原理以及用法',
     },
     {
       value: 'bindProjectSpace',
-      label: '怎么绑定项目空间',
+      label: '如何创建vue3+vite+electron的项目',
       iconConfig: { name: 'icon-priority', color: '#3ac295' },
-      desc: '如何绑定云空间中的项目',
+      desc: '从0到1创建一个完整的桌面端项目',
     },
   ],
 };
@@ -165,12 +166,12 @@ const simplePrompt = [
   {
     value: 'quickSort',
     iconConfig: { name: 'icon-info-o', color: '#5e7ce0' },
-    label: '帮我写一个快速排序',
+    label: '帮我生成一份威海5日游计划',
   },
   {
     value: 'helpMd',
     iconConfig: { name: 'icon-star', color: 'rgb(255, 215, 0)' },
-    label: '你可以帮我做些什么？',
+    label: '什么是MCP?',
   },
 ];
 const startPage = ref(true);
@@ -269,18 +270,18 @@ const client = new OpenAI({
 
 // 提交信息
 const onSubmit = debounce((evt: any) => {
-  const now = Date.now();
+  // const now = Date.now();
 
-  if (!lastSubmitTime.value || (now - lastSubmitTime.value) > 60000) {
-    lastSubmitTime.value = now;
-  } else {
-    ElNotification({
-      title: 'Warning',
-      message: '60秒内不能重复提交，token限制！',
-      type: 'warning',
-    })
-    return;
-  }
+  // if (!lastSubmitTime.value || (now - lastSubmitTime.value) > 60000) {
+  //   lastSubmitTime.value = now;
+  // } else {
+  //   ElNotification({
+  //     title: 'Warning',
+  //     message: '60秒内不能重复提交，token限制！',
+  //     type: 'warning',
+  //   })
+  //   return;
+  // }
 
   isVisible.value = false;
   if (!evt || evt === "@") return;
@@ -294,26 +295,26 @@ const onSubmit = debounce((evt: any) => {
     avatarConfig: { name: 'user' },
   });
 
-  // setTimeout(() => {
-  //   // 模型返回消息
-  //   messages.value.push({
-  //     from: 'model',
-  //     content: evt,
-  //     loading: true
-  //   });
-  // }, 200);
+  setTimeout(() => {
+    // 模型返回消息
+    messages.value.push({
+      from: 'model',
+      content: evt,
+      loading: true
+    });
+  }, 200);
 
-  // setTimeout(() => {
-  //   // 模型返回消息
-  //   messages.value.pop();
-  //   messages.value.push({
-  //     from: 'model',
-  //     content: content.value,
-  //     loading: false
-  //   });
-  // }, 800);
+  setTimeout(() => {
+    // 模型返回消息
+    messages.value.pop();
+    messages.value.push({
+      from: 'model',
+      content: content.value,
+      loading: false
+    });
+  }, 800);
 
-  fetchData(evt);
+  // fetchData(evt);
 }, 500);
 
 const fetchData = async (ques: any) => {
@@ -360,7 +361,7 @@ const fetchData = async (ques: any) => {
   padding-right: 10px;
 }
 .mc-layout-content.content-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, #3cd4f9, #e26cf9);
+  background: linear-gradient(45deg, #418a9c, #e7adf3);
   border-radius: 5px;
 }
 .mc-layout-content.content-container::-webkit-scrollbar-thumb {
@@ -424,7 +425,7 @@ const fetchData = async (ques: any) => {
         text-align: left;
     }
     .container .mc-bubble .mc-bubble-content-container {
-        max-width: 60% !important;
+        max-width: 70% !important;
     }
     .border-cls {
       border: 1px solid #acaeb3;

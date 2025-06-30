@@ -15,7 +15,7 @@ app.whenReady().then(() => {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 650,
-    icon: icon,
+    icon: path.join(__dirname, '..', "logo.png"),
     titleBarStyle: 'hidden', // 隐藏原生标题栏
     frame: false, // 无边框窗口（可选）
     show: false,
@@ -49,7 +49,7 @@ app.whenReady().then(() => {
     { label: '显示', click: () => mainWindow.show() },
     { label: '退出', role: 'quit' }
   ])
-  tray.setToolTip('AI Chat')
+  tray.setToolTip('Space Helper')
   tray.setContextMenu(contextMenu)
 
   ipcMain.on('window-minimize', () => mainWindow.minimize())

@@ -23,7 +23,7 @@ electron.app.whenReady().then(() => {
   const mainWindow = new electron.BrowserWindow({
     width: 900,
     height: 650,
-    icon,
+    icon: path__namespace.join(__dirname, "..", "logo.png"),
     titleBarStyle: "hidden",
     // 隐藏原生标题栏
     frame: false,
@@ -48,7 +48,7 @@ electron.app.whenReady().then(() => {
     { label: "显示", click: () => mainWindow.show() },
     { label: "退出", role: "quit" }
   ]);
-  tray.setToolTip("AI Chat");
+  tray.setToolTip("Space Helper");
   tray.setContextMenu(contextMenu);
   electron.ipcMain.on("window-minimize", () => mainWindow.minimize());
   electron.ipcMain.on("window-toggle-maximize", () => {

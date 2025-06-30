@@ -18,11 +18,11 @@
 
 const currentTime = new Date().getTime().toString();
 module.exports = {
-    productName: "AI Chat",
-    copyright: "Copyright©2025 AI Chat",
+    productName: "SpaceHelper",
+    copyright: "Copyright©2025 SpaceHelper",
     publish: {
         provider: "github", // 自动更新提供商（如 GitHub Releases）
-        token: "",
+        token: "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",
         owner: "Ian-soy",
         updaterCacheDirName: "AI-Chat-updater",
         repo: "AI-Chat",
@@ -76,7 +76,7 @@ module.exports = {
         allowToChangeInstallationDirectory: true, // 允许用户更改安装路径
         createDesktopShortcut: true, // 创建桌面快捷方式
         createStartMenuShortcut: true, // 创建开始菜单快捷方式
-        shortcutName: 'AI Chat', // 自定义快捷方式名称
+        shortcutName: 'SpaceHelper', // 自定义快捷方式名称
         runAfterFinish: false, // 不自动运行安装程序
         include: 'build/installer.nsh', // 自定义nsis安装脚本
         installerIcon: 'public/logo.ico', // 自定义安装图标

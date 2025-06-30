@@ -1,5 +1,6 @@
 <!-- tabbar -->
 <script setup lang="ts">
+    import logo from '../assets/logo-32.png';
     import { ref } from 'vue'
     const isMaximized = ref(false)
 
@@ -18,7 +19,7 @@
 
 <template>
   <div class="title-bar">
-    <McHeader class="logo" :logoImg="'https://matechat.gitcode.com/logo.svg'">
+    <McHeader class="logo" :logoImg="logo">
     </McHeader>
     <div class="controls">
         <button @click="handleMinimize" title="最小化" id="min-btn">－</button>
@@ -72,4 +73,10 @@
   outline: none;
 }
 
+</style>
+
+<style>
+  .title-bar .logo .mc-header-logo {
+    width: 66%;
+  }
 </style>
