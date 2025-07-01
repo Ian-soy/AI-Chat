@@ -54,7 +54,9 @@ class MainInit {
       center: true,
       webPreferences: {
         preload: path__namespace.join(__dirname, "..", "preload/index.js"),
-        contextIsolation: true
+        contextIsolation: true,
+        devTools: false
+        // 彻底禁用开发者工具
       }
     });
     if (process.env.VITE_DEV_SERVER_URL) {
