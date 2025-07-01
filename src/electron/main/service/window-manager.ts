@@ -2,6 +2,7 @@ import { BrowserWindow, ipcMain, nativeImage, Menu, Tray } from "electron";
 import config from "../../../../config/index";
 import { winURL, loadingURL } from "../config/static-path";
 import * as path from 'path';
+import { app } from 'electron'
 const icon = nativeImage.createFromPath(path.join(__dirname, '..', "logo.png"));
 class MainInit {
   public winURL: string = "";
@@ -26,15 +27,16 @@ class MainInit {
         webPreferences: {
             preload: path.join(__dirname, '..', 'preload/index.js'),
             contextIsolation: true,
-            devTools: false // 彻底禁用开发者工具
+            devTools: false,
         }
     })
 
-    if (process.env.VITE_DEV_SERVER_URL) {
-        this.mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL as string)
-    } else {
+    if (app.isPackaged) {
         // 生产环境下，加载打包后的文件
         this.mainWindow.loadFile(this.winURL);
+    } else {
+        // 开发环境下，加载 Vite 服务器
+        this.mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL as string)
     }
     // dom-ready之后显示界面
     this.mainWindow.once("ready-to-show", () => {

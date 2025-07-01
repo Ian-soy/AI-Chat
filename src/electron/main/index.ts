@@ -27,9 +27,9 @@ app.on('browser-window-created', () => {
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
-    app.removeAsDefaultProtocolClient('ai-chat')
+    app.removeAsDefaultProtocolClient('Space Helper')
     console.log('connot work')
   }
 } else {
-  app.setAsDefaultProtocolClient('ai-chat')
+  app.setAsDefaultProtocolClient('Space Helper')
 }
