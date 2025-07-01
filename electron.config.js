@@ -49,12 +49,7 @@ module.exports = {
     // 仅在生产环境压缩
     compression: process.env.NODE_ENV === "production" ? "maximum" : "store",
     win: {
-        target: [
-            {
-                target: 'nsis', // windows nsis 安装程序
-                arch: ['x64']
-            }
-        ]
+        icon: "public/icons/icon.ico",
     },
     mac: {
         target: 'dmg',
