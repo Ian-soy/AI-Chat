@@ -25,7 +25,8 @@ class MainInit {
         center: true,
         webPreferences: {
             preload: path.join(__dirname, '..', 'preload/index.js'),
-            contextIsolation: true
+            contextIsolation: true,
+            devTools: false // 彻底禁用开发者工具
         }
     })
 
