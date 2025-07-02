@@ -34,8 +34,7 @@ class MainInit {
         center: true,
         webPreferences: {
             preload: path.join(__dirname, '..', 'preload/index.js'),
-            contextIsolation: true,
-            devTools: false,
+            contextIsolation: true
         }
     })
 
@@ -89,6 +88,7 @@ class MainInit {
       webPreferences: {
         experimentalFeatures: true,
         preload: path.join(__dirname, '..', 'preload/index.js'),
+        devTools: false
       },
     })
 
