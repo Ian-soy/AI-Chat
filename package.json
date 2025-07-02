@@ -1,7 +1,7 @@
 {
   "name": "ai-chat",
   "private": true,
-  "version": "5.0.0",
+  "version": "5.1.0",
   "author": "yuanjun",
   "keywords": [
     "ai",
@@ -22,10 +22,10 @@
   "description": "致力于打造一个功能强大、灵活可扩展的智能对话系统，通过对接前沿大模型，实现精准、流畅且富有洞察力的人机交互。无论是为企业构建智能客服以应对海量咨询，还是为个人用户提供便捷的知识获取与生活建议助手，该系统都能展现其独特价值。",
   "main": "public/main/index.js",
   "scripts": {
-    "dev": "vite",
-    "build:electron": "vite build && electron-builder -c electron.config.js",
-    "release": "vite build && electron-builder -c electron.config.js",
-    "build": "vite build",
+    "dev": "cross-env NODE_ENV=development vite",
+    "build:electron": "cross-env NODE_ENV=production vite build && electron-builder -c electron.config.js",
+    "release": "cross-env NODE_ENV=production vite build && electron-builder -c electron.config.js",
+    "build": "cross-env NODE_ENV=production vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/tsconfig": "^0.7.0",
+    "cross-env": "^7.0.3",
     "electron": "^37.1.0",
     "electron-builder": "^26.0.12",
     "element-plus": "^2.10.2",

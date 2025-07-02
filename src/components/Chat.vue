@@ -402,6 +402,12 @@ const onSubmit = debounce((evt: any) => {
     avatarConfig: { name: 'user' },
   });
 
+  // 生成环境使用api接口
+  if (process.env.NODE_ENV === 'production') {
+    fetchData(evt);
+    return;
+  }
+
   setTimeout(() => {
     // 模型返回消息
     messages.value.push({
@@ -420,8 +426,6 @@ const onSubmit = debounce((evt: any) => {
       loading: false
     });
   }, 800);
-
-  // fetchData(evt);
 }, 500);
 
 const fetchData = async (ques: any) => {

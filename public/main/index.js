@@ -54,7 +54,8 @@ class MainInit {
       center: true,
       webPreferences: {
         preload: path__namespace.join(__dirname, "..", "preload/index.js"),
-        contextIsolation: true
+        contextIsolation: true,
+        devTools: !electron.app.isPackaged ? true : false
       }
     });
     if (electron.app.isPackaged) {
@@ -95,7 +96,7 @@ class MainInit {
       webPreferences: {
         experimentalFeatures: true,
         preload: path__namespace.join(__dirname, "..", "preload/index.js"),
-        devTools: false
+        devTools: !electron.app.isPackaged ? true : false
       }
     });
     this.loadWindow.loadURL(loadingURL2);
