@@ -26,6 +26,8 @@ npm run build:electron
 ![](./public/3.png)
 ![](./public/4.png)
 ![](./public/5.png)
+![](./public/6.png)
+![](./public/7.png)
 
 ## 项目结构
 

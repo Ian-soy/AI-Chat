@@ -1,7 +1,1 @@
-"use strict";
-const { contextBridge, ipcRenderer } = require("electron");
-contextBridge.exposeInMainWorld("electronAPI", {
-  minimize: () => ipcRenderer.send("window-minimize"),
-  toggleMaximize: () => ipcRenderer.send("window-toggle-maximize"),
-  close: () => ipcRenderer.send("window-close")
-});
+"use strict";const{contextBridge:i,ipcRenderer:e}=require("electron");i.exposeInMainWorld("electronAPI",{minimize:()=>e.send("window-minimize"),toggleMaximize:()=>e.send("window-toggle-maximize"),close:()=>e.send("window-close")});
