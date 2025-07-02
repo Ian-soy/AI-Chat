@@ -32,21 +32,29 @@ npm run build:electron
 ```bash
 electron-vue
 ├── build
-│   ├── installer.nsh
-├── publish
-│   ├── vite.svg
+│   ├── installer.nsh       // 自定义nsis安装脚本
+├── config
+│   ├── index.ts            // 自定义配置
+├── dist                    // 打包后的文件
+├── public
+│   ├── logo.png            // 应用图标
+│   ├── logo.ico            // 应用图标
+│   ├── icons               // 应用图标
+│   ├── main                // 主进程
+│   ├── preload             // 预加载
+│   ├── loader.html         // 加载页面
+│   ├── *.png               // 展示图片
 ├── src
-│   ├── assets
-│   ├── components
-│   ├── preload.ts
-│   ├── renderer
-│   │   ├── App.vue
-│   │   ├── main.ts
-│   │   ├── style.css
-│   │   └── index.html
-│   └── electron
+│   ├── assets              // 静态资源
+│   ├── components          // 组件
+│   └── electron            // 主进程
 │       ├── main
 │       │   ├── index.ts
 │       ├── preload
 │       │   ├── index.ts
+│   ├── App.vue
+│   │── main.ts             
+│   │── style.css
+│   │── index.html
+
 

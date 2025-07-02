@@ -1,3 +1,12 @@
+/**
+ * 静态文件路径
+ * 这里定义了静态文件路径的位置
+ * 打包时会将 dist 文件夹复制到 public 文件夹下
+ * 所以这里的路径都是相对于 public 文件夹的
+ * author: yuanjun
+ * date: 2025-07-02
+ * */ 
+
 // 这里定义了静态文件路径的位置
 import { join } from 'path'
 import { app } from 'electron'

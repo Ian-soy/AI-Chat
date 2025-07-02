@@ -1,3 +1,11 @@
+/**
+ * 窗口管理
+ * 这里主要负责窗口的创建、销毁、切换等
+ * 窗口的创建需要在主进程中进行
+ * author: yuanjun
+ * date: 2025-07-02
+
+ * */ 
 import { BrowserWindow, ipcMain, nativeImage, Menu, Tray } from "electron";
 import config from "../../../../config/index";
 import { winURL, loadingURL } from "../config/static-path";
