@@ -20,6 +20,8 @@ npm run build
 npm run build:electron
 ```
 
+## preview
+
 ![](./public/0.png)
 ![](./public/1.png)
 ![](./public/2.png)
