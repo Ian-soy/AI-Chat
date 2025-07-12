@@ -6,8 +6,8 @@
     >
       <McIntroduction
         :logoImg="logo"
-        :title="'SpaceHelper'"
-        :subTitle="'Hi，欢迎使用 SpaceHelper'"
+        :title="'SpaceSearch'"
+        :subTitle="'Hi，欢迎使用 SpaceSearch'"
         :description="description"
       ></McIntroduction>
       <McPrompt
@@ -159,8 +159,8 @@ let currentListLabel: any;
 const lastSubmitTime = ref(0); // 上次提交时间
 
 const description = [
-  'SpaceHelper 可协助开发者进行代码编写、知识检索、信息查询及文档撰写等。' ,
-  '作为人工智能模型，SpaceHelper 提供的解答可能并非始终精准无误，不过您的反馈将助力 SpaceHelper 持续优化。'
+  'SpaceSearch 可协助创作者进行代码编写、知识检索、信息查询及文档撰写等。' ,
+  '作为人工智能模型，SpaceSearch 提供的解答可能并非始终精准无误，不过您的反馈将助力 SpaceSearch 持续优化。'
 ];
 
 const content = ref(`

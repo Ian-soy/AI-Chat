@@ -14,7 +14,7 @@
     <div class="side-bar-content">
       <div class="side-bar-logo">
         <img class="logo-cls" :src="logo" alt="logo">
-        <div class="side-bar-logo-text">SpaceChat</div>
+        <div class="side-bar-logo-text">SpaceSearch</div>
       </div>
       <div class="side-bar-search" @click="newConversation">
         <i class="icon icon-add"></i>
