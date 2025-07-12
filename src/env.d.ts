@@ -16,3 +16,8 @@ declare global {
     electronAPI: any; // 或者更具体的类型定义
   }
 }
+
+declare module './utils/env' {
+  export function isElectronEnv(): boolean;
+  // 添加其他需要导出的函数声明
+}

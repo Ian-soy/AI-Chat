@@ -1,5 +1,5 @@
 <template>
-  <McLayout class="container">
+  <McLayout :class="{'chat-container-cls': !isElectronEnv(), 'container': isElectronEnv()}">
     <McLayoutContent
       v-if="startPage"
       style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px"
@@ -23,10 +23,9 @@
           v-if="msg.from === 'user'"
           :content="msg.content"
           :align="'right'"
-          :avatarConfig="{ imgSrc: cat }"
         >
         </McBubble>
-        <McBubble v-else :loading="msg.loading" :avatarConfig="{ imgSrc: logo }">
+        <McBubble v-else :loading="msg.loading">
           <McMarkdownCard :content="msg.content"></McMarkdownCard>
         </McBubble>
       </template>
@@ -65,6 +64,7 @@
         </el-option>
       </el-select>
       <Button
+        v-if="isElectronEnv()"
         style="margin-left: auto"
         icon="add"
         shape="circle"
@@ -118,8 +118,8 @@ import 'vue-devui/button/style.css';
 import OpenAI from 'openai';
 import { debounce } from 'lodash-es';
 import { ElNotification, ElTooltip } from 'element-plus';
+import { isElectronEnv } from '../utils/env.ts'
 import logo from '../assets/logo-32.png';
-import cat from '../assets/cat.png';
 
 const isVisible = ref(false);
 const inputRef = ref();
@@ -256,6 +256,8 @@ const newConversation = () => {
   startPage.value = true;
   messages.value = [];
 }
+
+defineExpose({ newConversation })
 
 const onSearchChange = (e: { triggerIndex: any; cursorIndex: any; trigger: any; value: string | any[]; }) => {
   triggerIndex = e.triggerIndex;
@@ -476,11 +478,11 @@ onUnmounted(() => {
   .content-container {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 24px;
     overflow: auto;
-    padding-right: 10px;
+    /* padding-right: 10px; */
   }
-  .mc-layout-content.content-container::-webkit-scrollbar-thumb {
+  /* .mc-layout-content.content-container::-webkit-scrollbar-thumb {
     background: linear-gradient(45deg, #418a9c, #e384f7);
     border-radius: 5px;
   }
@@ -489,10 +491,11 @@ onUnmounted(() => {
     flex-direction: column;
     gap: 8px;
     overflow: auto;
-  }
+  } */
 
   .mc-layout-content.content-container::-webkit-scrollbar {
-    width: 6px;
+    /* width: 6px; */
+    display: none;
   }
   .input-foot-wrapper {
     display: flex;
@@ -536,6 +539,16 @@ onUnmounted(() => {
       }
     }
   }
+
+  .chat-container-cls {
+    max-width: 800px;
+    gap: 10px;
+    margin: 40px auto;
+  }
+
+  .chat-container-cls::-webkit-scrollbar {
+    display: none;
+  }
 </style>
 
 <style>
@@ -544,14 +557,10 @@ onUnmounted(() => {
         color:  #252b3a;
         text-align: left;
     }
-    .container .mc-bubble .mc-bubble-content-container {
-        max-width: 70% !important;
-    }
     .border-cls {
       border: 1px solid #acaeb3;
       padding: 1px 4px;
       border-radius: 5px;
-      font-size: 12px !important;
     }
     .border-cls:hover {
       color: #000;
@@ -571,6 +580,7 @@ onUnmounted(() => {
 
     .model-cls .el-select__placeholder {
       color: #252b3a;
+      font-size: 14px;
     }
 
     .model-cls .el-select__placeholder {
@@ -627,4 +637,23 @@ onUnmounted(() => {
       width: 32px !important;
       height: 32px !important;
     }
+
+    .chat-container-cls .mc-introduction-description, .container .mc-introduction-description {
+      font-size: 14px !important;
+    }
+
+    .chat-container-cls .mc-bubble-right .mc-bubble-content, .container .mc-bubble-right .mc-bubble-content{
+      font-size: 16px !important;
+    }
+
+    .chat-container-cls .mc-bubble-left .mc-bubble-content-container, .container .mc-bubble-left .mc-bubble-content-container{
+      width: 100% !important;
+    }
+
+    .chat-container-cls .mc-bubble-left .mc-bubble-content.filled, .container .mc-bubble-left .mc-bubble-content.filled{
+      background: rgba(0, 0, 0, 0) !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
 </style>
+
