@@ -45,9 +45,11 @@
     "element-plus": "^2.10.2",
     "lodash-es": "^4.17.21",
     "openai": "^5.8.2",
+    "typed.js": "^2.1.0",
     "typescript": "~5.8.3",
     "vite": "^7.0.0",
     "vite-plugin-electron": "^0.29.0",
+    "vue-router": "^4.5.1",
     "vue-tsc": "^2.2.10"
   }
 }

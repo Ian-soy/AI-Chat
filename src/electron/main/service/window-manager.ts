@@ -25,8 +25,8 @@ class MainInit {
   // 主窗口函数
   createMainWindow() {
     this.mainWindow = new BrowserWindow({
-        width: 900,
-        height: 650,
+        width: 1000,
+        height: 700,
         icon: path.join(__dirname, '..', "logo.png"),
         titleBarStyle: config.IsUseSysTitle ? "default" : "hidden",
         frame: false, // 无边框窗口（可选）

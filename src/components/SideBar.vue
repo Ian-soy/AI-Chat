@@ -1,12 +1,28 @@
 <!-- tabbar -->
 <script setup lang="ts">
-    const emit = defineEmits(['newConversation'])
+    const emit = defineEmits(['newConversation', 'newRecord'])
     import logo from '../assets/logo-32.png';
-    // import { ref } from 'vue'
+    import { ref } from 'vue'
+    const expandStatus = ref(false)
+    const langue = ref('zh')
 
     const newConversation = () => {
       emit('newConversation')
     }
+
+    const newRecord = () => {
+      emit('newRecord')
+      expandStatus.value = !expandStatus.value
+    }
+
+    const changeLangue = () => {
+      if (langue.value === 'zh') {
+        langue.value = 'en'
+      } else {
+        langue.value = 'zh'
+      }
+    }
+    
 </script>
 
 <template>
@@ -20,14 +36,14 @@
         <i class="icon icon-add"></i>
         <div class="side-bar-search-text">新对话</div>
       </div>
-      <div class="side-bar-history">
-        <i class="icon icon-history"></i>
+      <div class="side-bar-history" @click="newRecord">
+        <i class="icon" :class="{'icon-nav-collapse': expandStatus, 'icon-nav-expand': !expandStatus}"></i>
         <div class="side-bar-search-text">记录</div>
       </div>
     </div>
 
     <div class="side-bar-footer">
-      <!-- <div>CN</div> -->
+      <div class="side-bar-footer-item" @click="changeLangue"> {{ langue === 'zh' ? 'CN' : 'EN' }} </div>
        <el-tooltip
         class="download-cls"
         effect="dark"
@@ -35,14 +51,14 @@
         placement="right"
       >
         <a href="https://github.com/Ian-soy/AI-Chat/archive/refs/tags/v5.1.0.zip" class="side-bar-footer-item">
-          
             <span>
               <i class="icon icon-download-2"></i>
             </span>
           
         </a>
       </el-tooltip>
-      <div class="side-bar-footer-item"><i class="icon icon-setting"></i></div>
+      <!-- <div class="side-bar-footer-item"><i class="icon icon-collapse-to-left"></i></div> -->
+      <div class="side-bar-footer-item login-cls">登录</div>
     </div>
   </div>
 </template>
@@ -96,6 +112,7 @@
 
 .side-bar-search, .side-bar-history {
   cursor: pointer;
+  width: 100%;
 }
 
 .side-bar-search-text {
@@ -118,9 +135,15 @@
   line-height: 36px;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 14px;
 }
 .side-bar-footer-item:hover {
   background-color: #fff3;
+}
+.login-cls {
+  font-size: 12px;
+  background-color: #fff3;
+  border-radius: 50%;
 }
 .icon {
   font-size: 20px;

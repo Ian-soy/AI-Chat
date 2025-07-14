@@ -10,3 +10,4 @@ export const isElectronEnv = () => {
   
   return hasElectron || viteFlag
 }
+
