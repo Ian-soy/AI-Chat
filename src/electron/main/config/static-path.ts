@@ -19,7 +19,7 @@ const filePath = {
     production: `${join('dist', 'index.html')}`,
   },
   loadingURL: {
-    development: `http://localhost:5173/loader.html`,
+    development: `http://localhost:5173/ai/loader.html`,
     production: `file://${join(app.getAppPath(), 'dist', 'loader.html')}`,
   }
 }

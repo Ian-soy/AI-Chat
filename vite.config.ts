@@ -6,6 +6,7 @@ import electron from 'vite-plugin-electron'
 console.log('VITE_MODE', process.env.VITE_MODE)
 
 export default defineConfig({
+  base: '/ai/',
   plugins: [vue(), 
     process.env.VITE_MODE === 'electron' && electron([
       {
