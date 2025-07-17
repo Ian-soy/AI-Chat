@@ -44,7 +44,7 @@ class MainInit {
   // 主窗口函数
   createMainWindow() {
     this.mainWindow = new electron.BrowserWindow({
-      width: 1e3,
+      width: 1100,
       height: 700,
       icon: path__namespace.join(__dirname, "..", "logo.png"),
       titleBarStyle: "hidden",

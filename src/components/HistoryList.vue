@@ -14,7 +14,7 @@
         <div v-if="!state.dataList.length" class="history-list-box empty">
             <div class="history-list-empty">
                 <i class="icon icon-data-storage"></i>
-                <span>暂无数据</span>
+                <span>{{ $t('search005') }}</span>
             </div>
         </div>
     </div>
@@ -61,6 +61,21 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    overflow-y: auto;
+}
+
+.collapse-container::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.collapse-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, rgba(65, 137, 155, 0.2), rgba(228, 130, 247, 0.3));
+    border-radius: 5px;
+}
+
+.collapse-container::-webkit-scrollbar-corner {
+    background-color: #f5f5f5;
 }
 
 .collapse-content {
@@ -68,7 +83,7 @@ onMounted(() => {
     color: var(--devui-text-weak, #575d6c);
 }
 .history-item.active, .history-item.open, .history-item:hover {
-    background: linear-gradient(to right, #f3efff, #f3efff33, #e2f1fd33, #e2f1fd);
+    background: linear-gradient(45deg, rgba(65, 137, 155, 0.1), rgba(228, 130, 247, 0.2));
     box-shadow: 2px 2px 8px #e9e9e9;
     cursor: pointer;
 }

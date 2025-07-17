@@ -3,12 +3,11 @@
     <TitleBar v-if="isElectronEnv()" @newConversation="handleConversation" @newRecord="handleRecord" />
     <SideBar v-else @newConversation="handleConversation" @newRecord="handleRecord" />
     <div :class="{'main-cls': !isElectronEnv(), 'main': isElectronEnv()}">
-      <div class="history-list-container" :class="{'not-expand': !expandStatus}">
-
+      <div class="history-list-container" :class="{'not-expand': !expandStatus}" :style="{ height: containerHeight}">
         <div class="history-content" :class="{'not-expand': !expandStatus}">
           <div  class="history-header">
             <div  class="history-header-left">
-              <span  class="history-title">历史记录</span>
+              <span  class="history-title">{{ $t('search006') }}</span>
             </div>
           </div>
 
@@ -22,7 +21,8 @@
             </div>
             <div class="devui-input devui-input--md">
               <div class="devui-input__wrapper">
-                <input class="devui-input__inner" placeholder="搜索记录" autofocus="false" maxlength="9007199254740991" title="" type="text" value="">
+                <input class="devui-input__inner" :placeholder="$t('search007')" autofocus="false" maxlength="9007199254740991" title="" type="text" value="">
+
               </div>
             </div>
           </label>
@@ -36,17 +36,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, computed } from 'vue'
 import Chat from '../../components/Chat.vue'
 import TitleBar from '../../components/TitleBar.vue'
 import SideBar from '../../components/SideBar.vue'
 import HistoryList from '../../components/HistoryList.vue'
-
-
 import { isElectronEnv } from '../../utils/env.ts'
+
 const chatRef = ref(null)
 const historyListRef = ref(null)
 const expandStatus = ref(true)
+
+const containerHeight = computed(() => 
+  !isElectronEnv() ? '100%' : 'calc(100vh - 82px)'
+);
 
 const handleConversation = () => {
   nextTick(() => {

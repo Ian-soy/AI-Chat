@@ -1,10 +1,14 @@
 <!-- tabbar -->
 <script setup lang="ts">
+    import { setLocale } from '../locales'
+    import { useI18n } from 'vue-i18n';
+    const { locale } = useI18n(); // 必须通过 useI18n 解构
+
     const emit = defineEmits(['newConversation', 'newRecord'])
     import logo from '../assets/logo-32.png';
     import { ref } from 'vue'
     const expandStatus = ref(false)
-    const langue = ref('zh')
+    const langue = ref(locale.value)
 
     const newConversation = () => {
       emit('newConversation')
@@ -21,6 +25,9 @@
       } else {
         langue.value = 'zh'
       }
+
+      locale.value = langue.value === 'zh' ? 'zh' : 'en';
+      setLocale(locale.value == 'en' ? 'en' : 'zh') // 缓存语言
     }
     
 </script>
@@ -34,20 +41,20 @@
       </div>
       <div class="side-bar-search" @click="newConversation">
         <i class="icon icon-add"></i>
-        <div class="side-bar-search-text">新对话</div>
+        <div class="side-bar-search-text">{{ $t('search001') }}</div>
       </div>
       <div class="side-bar-history" @click="newRecord">
         <i class="icon" :class="{'icon-nav-collapse': expandStatus, 'icon-nav-expand': !expandStatus}"></i>
-        <div class="side-bar-search-text">记录</div>
+        <div class="side-bar-search-text">{{ $t('search002') }}</div>
       </div>
     </div>
 
     <div class="side-bar-footer">
-      <div class="side-bar-footer-item" @click="changeLangue"> {{ langue === 'zh' ? 'CN' : 'EN' }} </div>
+      <div class="side-bar-footer-item" @click="changeLangue"> {{ langue === 'zh' ? 'EN' : 'CN' }} </div>
        <el-tooltip
         class="download-cls"
         effect="dark"
-        content="下载客户端"
+        :content="$t('search003')"
         placement="right"
       >
         <a href="https://github.com/Ian-soy/AI-Chat/archive/refs/tags/v5.1.0.zip" class="side-bar-footer-item">
@@ -58,7 +65,7 @@
         </a>
       </el-tooltip>
       <!-- <div class="side-bar-footer-item"><i class="icon icon-collapse-to-left"></i></div> -->
-      <div class="side-bar-footer-item login-cls">登录</div>
+      <div class="side-bar-footer-item login-cls">{{ $t('search004') }}</div>
     </div>
   </div>
 </template>

@@ -10,15 +10,27 @@
       ></McIntroduction>
       <div class="mian-content-cls" >
         <div class="mian-content-title-cls" ref="typedRef"></div>
-        <div v-html="description"></div>
+        <div style="white-space: pre-line;">{{ t('search0019') }}</div>
       </div>
-      
-      <McPrompt
-        :list="introPrompt.list"
-        :direction="introPrompt.direction"
-        class="intro-prompt"
-        @itemClick="onSubmit($event.label)"
-      ></McPrompt>
+      <!-- prompt list -->
+      <div class="mc-prompt intro-prompt">
+        <div class="mc-list mc-list-horizontal">
+          <div class="mc-list-item filled" v-for="item in promptList" :key="item.label" @click="onSubmit($t(item.label) + ' ' + $t(item.desc))">
+            <div class="mc-prompt-item">
+              <div class="mc-prompt-item-icon">
+                <div class="mc-prompt-icon">
+                  <i :class="item.iconConfig.name" :style="{color: item.iconConfig.color}"></i>
+                </div>
+              </div>
+              <div class="mc-prompt-item-content">
+                <div class="mc-prompt-item-label">{{ $t(item.label) }}</div>
+                <div class="mc-prompt-item-description">{{ $t(item.desc) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </McLayoutContent>
     <McLayoutContent id="content-container-id" class="content-container" v-else>
       <template v-for="(msg, idx) in messages" :key="idx">
@@ -34,13 +46,6 @@
       </template>
     </McLayoutContent>
     <div class="shortcut" style="display: flex; align-items: center; gap: 8px; position: release;">
-      <McPrompt
-        v-if="!startPage"
-        :list="simplePrompt"
-        :direction="'horizontal'"
-        style="flex: 1"
-        @itemClick="onSubmit($event.label)"
-      ></McPrompt>
       <el-select
         id="modelSelectRef"
         v-model="currentModel"
@@ -54,7 +59,7 @@
         @change="updateInputImage"
       >
         <template #header>
-          模型
+          {{ $t('search0010') }}
         </template>
         <el-option
           v-for="item in modelOptions"
@@ -66,22 +71,40 @@
           <span>{{ item.label }}</span>
         </el-option>
       </el-select>
+
+      <!-- 一键保存按钮 -->
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('search0024')"
+        placement="top"
+      >
+        <Button
+          v-if="!startPage"
+          class="save-knowledge-cls"
+          style="margin-left: auto"
+          icon="save-2"
+          shape="circle"
+          size="lg"
+          @click="saveConversation"
+        ></Button>
+      </el-tooltip>
     </div>
     <McLayoutSender>
       <McMention v-model="isVisible" :prefix="prefix" @searchChange="onSearchChange" @toggleChange="onToggleChange">
-        <McInput class="content-input-cls" ref="inputRef" :placeholder="currentPlaceholder" :value="inputValue" :maxLength="4000" @change="(e: string) => (inputValue = e)" @submit="onSubmit">
+        <McInput class="content-input-cls" ref="inputRef" :loading="loading" :placeholder="currentPlaceholder" :value="inputValue" :maxLength="4000" @change="(e: string) => (inputValue = e)" @submit="onSubmit" @cancel="onCancel">
           <template #extra>
             <div class="input-foot-wrapper">
               <div class="input-foot-left">
-                <template v-for="(item, index) in inputFootIcons" :key="index">
+                <template v-for="item in inputFootIcons" :key="item.text">
                   <el-tooltip
                     class="box-item"
                     effect="dark"
-                    :content="item.tip"
+                    :content="$t(item.tip)"
                     placement="top"
                   >
                     <span class="border-cls"  @click="onIntelligentClick(item)">
-                      <i :class="item.icon"></i>{{ item.text }}
+                      <i :class="item.icon"></i>{{ $t(item.text) }}
                     </span>
                   </el-tooltip>
                 </template>
@@ -91,10 +114,25 @@
               </div>
               <div class="input-foot-right">
                 <Button icon="op-clearup" shape="round" :disabled="!inputValue" @click="inputValue = ''">
-                  <span class="demo-button-content">清空输入</span>
+                  <span class="demo-button-content">{{ $t('search008') }}</span>
                 </Button>
               </div>
             </div>
+          </template>
+
+          <template #button>
+            <Button
+              shape="round"
+              class="submit-button"
+              :disabled="!inputValue && !loading"
+              @click="onSubmit"
+            >
+              <span class="mc-button-content">
+                <!-- 此处可自定义图标及其文案 -->
+                <i class="icon" :class="{'icon-loading': loading, 'icon-publish-new': !loading}"></i>
+                <span>{{ loading ? t('search0023') : t('search0022') }}</span>
+              </span>
+            </Button>
           </template>
         </McInput>
         <template #menu>
@@ -106,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, onUnmounted, onMounted } from 'vue';
+import { ref, watch, nextTick, onUnmounted, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { Button } from 'vue-devui/button';
 import 'vue-devui/button/style.css';
@@ -116,21 +154,22 @@ import { ElNotification, ElTooltip } from 'element-plus';
 import Typed from 'typed.js';
 import { isElectronEnv } from '../utils/env.ts'
 import { formatDate, getCurrentTopicId } from '../utils/index.ts'
-import { modelList, simplePromptList, contentString, descriptionString } from '../const/index.ts'
+import { modelList, contentString, promptData } from '../const/index.ts'
 import logo from '../assets/logo-32.png';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n(); // 必须通过 useI18n 解构
 const emit = defineEmits(['newHistoryList'])
 
 const route = useRoute();
 const typedRef = ref(null);
 const isVisible = ref(false);
+const loading = ref(false);
 const inputRef = ref();
 const currentId = ref(getCurrentTopicId()); // 当前对话id
 const listData = ref([{
   label: '',
   value: ''
 }]);
-
-const currentPlaceholder = ref('请输入您的问题，并按Enter发送，按Shift+Enter换行');
 
 // 模型选择
 const currentModel = ref('deepseek-chat');
@@ -142,43 +181,22 @@ let cursorIndex: number | undefined;
 let currentTrigger: string;
 let currentListLabel: any;
 const lastSubmitTime = ref(0); // 上次提交时间
-
-const description = descriptionString;
+let typedInstance = null as Typed | null;
 
 const content = contentString;
-const introPrompt = {
-  direction: 'horizontal',
-  list: [
-    {
-      value: 'quickSort',
-      label: '帮我生成一份威海5日游计划',
-      iconConfig: { name: 'icon-info-o', color: '#5e7ce0' },
-      desc: '使用小红书格式进行排版布局',
-    },
-    {
-      value: 'helpMd',
-      label: '什么是MCP?',
-      iconConfig: { name: 'icon-star', color: 'rgb(255, 215, 0)' },
-      desc: '了解MCP概念、原理以及用法',
-    },
-    {
-      value: 'bindProjectSpace',
-      label: '如何创建vue3+vite+electron的项目',
-      iconConfig: { name: 'icon-priority', color: '#3ac295' },
-      desc: '从0到1创建一个完整的桌面端项目',
-    },
-  ],
-};
-const simplePrompt = simplePromptList;
+
+const promptList = promptData;
 const startPage = ref(true);
 const inputValue = ref('');
 const inputFootIcons = [
-  { icon: 'icon-at', text: '智能体', tip: '输入"@"选择智能体'},
+  { icon: 'icon-at', text: 'search0012', value: '智能体', tip: 'search0014'},
   // { icon: 'icon-standard', text: '词库' },
-  { icon: 'icon-appendix', text: '附件', tip: '上传文件或文件夹'},
+  { icon: 'icon-appendix', text: 'search0013', value: '附件', tip: 'search0015'},
 ];
 
 const messages = ref<any[]>([]);
+
+const currentPlaceholder = computed(() => t('search0011'));
 
 // 
 const updateInputImage = (val: any) => {
@@ -198,6 +216,14 @@ const newConversation = () => {
   startPage.value = true;
   messages.value = [];
   currentId.value++ // 每次新增对话，id++
+  if (typedInstance) typedInstance.destroy();
+  nextTick(() => {
+    initTyped();
+  })
+}
+
+const saveConversation = () => {
+  console.log(123);
 }
 
 const chooseHistoryItem = (currentItem: any) => {
@@ -229,14 +255,13 @@ const onSearchChange = (e: { triggerIndex: any; cursorIndex: any; trigger: any; 
 
 const onListSelect = (e: { label: string | string[], value: string, model: boolean }) => {
   isVisible.value = false;
-  if (e.label.indexOf('上传') > -1) {
-    console.log('上传文件');
+  if (e.value.indexOf('upload') > -1) {
+    // console.log('上传文件');
   } else {
     currentListLabel = e.label;
     inputValue.value = inputValue.value.slice(0, triggerIndex) + currentTrigger + inputValue.value.slice(cursorIndex);
     // 选择智能体时直接出发新增元素
     insertElementAgent(e.label as string);
-    currentPlaceholder.value = "您正在与 " + e.label + " 进行对话";
   }
 };
 
@@ -272,7 +297,6 @@ const insertElementAgent = (label: string) => {
       // close事件直接控制元素显示隐藏
       const agent = document.querySelector('.choosed-agent-cls') as HTMLElement;
       agent.style.display = 'none';
-      currentPlaceholder.value = '请输入您的问题，并按Enter发送，按Shift+Enter换行';
     });
   })
   // 直接插入到父元素开头
@@ -281,11 +305,10 @@ const insertElementAgent = (label: string) => {
   inputValue.value = inputValue.value.slice(0, inputValue.value.length - 1)
 };
 
-
 // 点击智能体，附件操作
-const onIntelligentClick = (e: { text: string }) => {
+const onIntelligentClick = (e: { value: string }) => {
   isVisible.value = true;
-  if (e.text === '智能体') {
+  if (e.value === '智能体') {
     listData.value = [
       { label: 'Builder', value: 'builder' },
       { label: 'Builder with MCP', value: 'mcp' }
@@ -294,10 +317,10 @@ const onIntelligentClick = (e: { text: string }) => {
     cursorIndex = inputValue.value.length + 1;
     currentTrigger = '@';
     inputValue.value = inputValue.value.slice(0, inputValue.value.length) + '@';
-  } else if (e.text === '附件') {
+  } else if (e.value === '附件') {
     listData.value = [
-      { label: '上传文件', value: 'upload' },
-      { label: '上传文件夹', value: 'uploadFolder' },
+      { label: t('search0017'), value: 'upload' },
+      { label: t('search0018'), value: 'uploadFolder' },
     ];
   }
 }
@@ -320,6 +343,24 @@ watch(() => messages.value, () => {
   })
 }, { deep: true })
 
+watch(() => t('search0020'), () => {
+  if (typedInstance) typedInstance.destroy();
+  nextTick(() => {
+    initTyped();
+  })
+});
+
+const initTyped = () => {
+  // 打字
+  typedInstance = new Typed(typedRef.value, {
+    strings: [t('search0020'), t('search0021') + ' <i style="color: #e384f7" class="icon icon-search-new"></i>'],
+    typeSpeed: 100,
+    backSpeed: 50,
+    showCursor: false,
+    loop: true,
+  });
+};
+
 // 创建deepseek客户端
 const client = new OpenAI({
   apiKey: import.meta.env.VITE_DEEPSEEK_API_KEY, // 模型APIKey
@@ -329,6 +370,7 @@ const client = new OpenAI({
 
 // 提交信息
 const onSubmit = debounce((evt: any) => {
+  loading.value = true;
   const now = Date.now();
   if ((!lastSubmitTime.value || (now - lastSubmitTime.value) > 60000) || process.env.NODE_ENV !== 'production') {
     lastSubmitTime.value = now;
@@ -381,6 +423,11 @@ const onSubmit = debounce((evt: any) => {
   }, 800);
 }, 500);
 
+const onCancel = () => {
+  loading.value = false;
+  console.log('input cancel');
+};
+
 const handleMessageList = () => {
   const historyData = localStorage.getItem('historyData');
   const queryObject = {} as any;
@@ -404,7 +451,7 @@ const handleMessageList = () => {
   } else {
     localStorage.setItem('historyData', JSON.stringify([queryObject]));
   }
-
+  loading.value = false;
   // 更新历史列表
   emit('newHistoryList')
 }
@@ -438,15 +485,7 @@ const fetchData = async (ques: any) => {
 };
 
 onMounted(() => {
-  // 打字效果
-  new Typed(typedRef.value, {
-    strings: ['Hi，欢迎使用 SpaceSearch', '智能AI搜索工具 <i style="color: #e384f7" class="icon icon-search-new"></i>'],
-    typeSpeed: 100,
-    backSpeed: 50,
-    showCursor: false,
-    loop: true,
-  });
-
+  initTyped();
   // 处理从知识库传递过来的问题参数
   const q = route.query.q;
   if (q) inputValue.value = q as string;
@@ -548,9 +587,104 @@ onUnmounted(() => {
   .chat-container-cls::-webkit-scrollbar {
     display: none;
   }
+
+  .submit-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    height: 32px;
+    line-height: 1.5;
+    color: var(--devui-light-text, #ffffff);
+    font-size: var(--devui-font-size, 14px);
+    padding: 0 12px;
+    border-radius: 20px;
+    background-color: var(--devui-primary, #e384f7);
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--devui-animation-duration-slow, .3s) var(--devui-animation-ease-in-out-smooth, cubic-bezier(.645, .045, .355, 1)), border-color var(--devui-animation-duration-slow, .3s) var(--devui-animation-ease-in-out-smooth, cubic-bezier(.645, .045, .355, 1)), color var(--devui-animation-duration-slow, .3s) var(--devui-animation-ease-in-out-smooth, cubic-bezier(.645, .045, .355, 1));
+  }
+
+  .submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .submit-button .icon-loading{
+      animation: rotating 1s linear infinite;
+  }
+  .submit-button .icon{
+      margin-right: 4px;
+      color: #fff;
+  }
+
+  .intro-prompt .mc-list-horizontal {
+      justify-content: center;
+  }
+
+  .mc-list-horizontal {
+      display: flex
+  ;
+      flex-wrap: wrap;
+      gap: 12px;
+  }
+  .mc-list{
+      width: 100%;
+      max-height: 300px;
+      box-sizing: border-box;
+      overflow: auto;
+  }
+
+  .mc-list .mc-list-item.filled{
+    background-color: var(--devui-gray-form-control-bg, #f5f5f5);
+  }
+
+  .mc-list.mc-list-horizontal .mc-list-item {
+      width: unset;
+  }
+
+  .mc-list .mc-list-item {
+      width: 100%;
+      line-height: 20px;
+      padding: 8px;
+      color: var(--devui-text, #252b3a);
+      font-size: var(--devui-font-size, 14px);
+      border-radius: var(--devui-border-radius, 2px);
+      box-sizing: border-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: color var(--devui-animation-duration-fast, .1s) var(--devui-animation-ease-in-out-smooth, cubic-bezier(.645, .045, .355, 1)), background-color var(--devui-animation-duration-fast, .1s) var(--devui-animation-ease-in-out-smooth, cubic-bezier(.645, .045, .355, 1));
+  }
+  .mc-prompt-item {
+      display: flex;
+      gap: 8px;
+  }
+  .mc-prompt-item .mc-prompt-item-content{
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+  }
+  .mc-prompt-item .mc-prompt-item-content .mc-prompt-item-label {
+      font-weight: 700;
+  }
+  .mc-prompt-item .mc-prompt-item-content .mc-prompt-item-description {
+      color: var(--devui-aide-text, #71757f);
+  }
 </style>
 
 <style>
+.devui-button.save-knowledge-cls:hover {
+  background-color: #e384f7 !important;
+}
+.devui-button.save-knowledge-cls:hover .devui-icon__container .icon-save-2{
+  color: #fff;
+}
+.devui-button.save-knowledge-cls .devui-icon__container .icon-save-2{
+    font-size: 16px !important;
+  }
     .container .mc-bubble .mc-bubble-content.filled{
         background: #f5f5f5;
         color:  #252b3a;
@@ -668,6 +802,13 @@ onUnmounted(() => {
       height: 24px;
       margin-bottom: 12px;
     }
+    .devui-button:focus-visible, .devui-button:focus {
+      outline: none;
+      border: none;
+    }
 
+    .el-tooltip span {
+      white-space: pre-line;
+    }
 </style>
 

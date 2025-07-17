@@ -7,7 +7,7 @@ console.log('VITE_MODE', process.env.VITE_MODE)
 
 export default defineConfig({
   base: './', // electron打包采用
-  // base: '/ai/', // web端打包采用
+  // base: '/search/', // web端打包采用
   build: {
     outDir: 'dist',
     assetsDir: 'static'  // 静态资源子目录
@@ -31,5 +31,5 @@ export default defineConfig({
         }
       }
     ])
-  ]
+  ],
 })

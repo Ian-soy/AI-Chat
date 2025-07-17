@@ -8,7 +8,7 @@
         <el-tooltip
           class="box-item"
           effect="dark"
-          content="新对话"
+          :content="$t('search001')"
           placement="top"
         >
           <button @click="newConversation" class="header-btn-cls"><i class="icon icon-add"></i></button>
@@ -16,13 +16,13 @@
         <el-tooltip
           class="box-item"
           effect="dark"
-          content="历史记录"
+          :content="$t('search002')"
           placement="top"
         >
           <button @click="newRecord" class="header-btn-cls"><i class="icon" :class="{'icon-nav-collapse': expandStatus, 'icon-nav-expand': !expandStatus}"></i></button>
         </el-tooltip>
 
-        <button class="header-btn-cls title-login-cls">登录</button>
+        <button class="header-btn-cls title-login-cls">{{ $t('search004') }}</button>
         
         <button class="btn-seperate"> | </button>
         <button @click="handleMinimize" title="最小化" class="header-btn-cls" id="min-btn"><i class="icon icon-code-editor-less"></i></button>
@@ -33,12 +33,15 @@
 </template>
 
 <script setup lang="ts">
+    import { setLocale } from '../locales'
+    import { useI18n } from 'vue-i18n';
+    const { locale } = useI18n(); // 必须通过 useI18n 解构
     const emit = defineEmits(['newConversation', 'newRecord'])
     import logo from '../assets/logo-32.png';
     import { ref } from 'vue'
     const isMaximized = ref(false)
     const expandStatus = ref(false)
-    const langue = ref('zh')
+    const langue = ref(locale.value)
     const newConversation = () => {
       emit('newConversation')
     }
@@ -65,6 +68,9 @@
       } else {
         langue.value = 'zh'
       }
+
+      locale.value = langue.value === 'zh' ? 'zh' : 'en';
+      setLocale(locale.value == 'en' ? 'en' : 'zh') // 缓存语言
     }
 </script>
 

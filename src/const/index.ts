@@ -11,18 +11,26 @@ export const modelList = [
   }
 ]
 
-export const simplePromptList = [
+export const promptData = [
   {
     value: 'quickSort',
+    label: 'search0025',
     iconConfig: { name: 'icon-info-o', color: '#5e7ce0' },
-    label: '帮我生成一份威海5日游计划',
+    desc: 'search0026',
   },
   {
     value: 'helpMd',
+    label: 'search0027',
     iconConfig: { name: 'icon-star', color: 'rgb(255, 215, 0)' },
-    label: '什么是MCP?',
+    desc: 'search0028',
   },
-];
+  {
+    value: 'bindProjectSpace',
+    label: 'search0029',
+    iconConfig: { name: 'icon-priority', color: '#3ac295' },
+    desc: 'search0030',
+  },
+]
 
 export const contentString = `
 # 快速排序（Quick Sort）
@@ -57,5 +65,3 @@ console.log(quickSort(arr)); // 输出排序后的数组
 }
 \`\`\`
 `
-
-export const descriptionString = 'SpaceSearch 可协助创作者进行代码编写、知识检索、信息查询及文档撰写等。<br />作为AI搜索工具，SpaceSearch 提供的解答可能并非始终精准无误，不过您的反馈将助力 SpaceSearch 持续优化。'
