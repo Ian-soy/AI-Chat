@@ -19,6 +19,7 @@
 const currentTime = new Date().getTime().toString();
 module.exports = {
     productName: "SpaceSearch",
+    appId: "site.spacehelper",
     copyright: "Copyright©2025 SpaceSearch",
     publish: {
         provider: "github", // 自动更新提供商（如 GitHub Releases）
@@ -52,11 +53,12 @@ module.exports = {
         icon: "public/icons/icon.ico",
     },
     mac: {
-        target: 'dmg',
-        category: "public.app-category.utilities"
+        "category": "public.app-category.utilities",
+        "target": ["dmg", "zip"],
+        "icon": "public/icons/icon.icns"
     },
     dmg: {
-        "icon": "public/icon.icns",             // 应用图标
+        "icon": "public/icons/icon.ico",             // 应用图标
         "iconSize": 100,                         // 图标尺寸
         "window": {                              // 窗口位置
         "x": 100,
