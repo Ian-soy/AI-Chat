@@ -57,7 +57,7 @@
         :content="$t('search003')"
         placement="right"
       >
-        <a href="https://github.com/Ian-soy/AI-Chat/archive/refs/tags/v5.1.0.zip" class="side-bar-footer-item">
+        <a href="https://github.com/Ian-soy/AI-Chat/releases/download/v7.1.0/SpaceSearch-Setup-7.1.0.exe" class="side-bar-footer-item">
             <span>
               <i class="icon icon-download-2"></i>
             </span>
