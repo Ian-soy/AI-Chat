@@ -34,7 +34,6 @@
       let baseUrl = process.env.NODE_ENV === 'production' ? window.location.origin : 'https://spacehelper.site:30443';
       window.open(baseUrl + '/sign-in?redirectUrl=' + window.location.href, '_blank')
     }
-    
 </script>
 
 <template>
