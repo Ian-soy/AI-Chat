@@ -29,6 +29,11 @@
       locale.value = langue.value === 'zh' ? 'zh' : 'en';
       setLocale(locale.value == 'en' ? 'en' : 'zh') // 缓存语言
     }
+
+    const login = () => {
+      let baseUrl = process.env.NODE_ENV === 'production' ? window.location.origin : 'https://spacehelper.site:30443';
+      window.open(baseUrl + '/sign-in?redirectUrl=' + window.location.href, '_blank')
+    }
     
 </script>
 
@@ -65,7 +70,7 @@
         </a>
       </el-tooltip>
       <!-- <div class="side-bar-footer-item"><i class="icon icon-collapse-to-left"></i></div> -->
-      <div class="side-bar-footer-item login-cls">{{ $t('search004') }}</div>
+      <div class="side-bar-footer-item login-cls" @click="login">{{ $t('search004') }}</div>
     </div>
   </div>
 </template>
